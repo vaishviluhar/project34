@@ -1,56 +1,86 @@
-var dog,dogImg,dogImg1;
-var database;
-var foodS,foodStock;
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+const Constraint = Matter.Constraint;
 
-function preload(){
-   dogImg=loadImage("Images/Dog.png");
-   dogImg1=loadImage("Images/happy dog.png");
-  }
+var engine, world;
+var box1, box2, box3,box4;
+var hero,monster,rope,ground;
 
-//Function to set initial environment
+function preload() {
+  bg = loadImage("gamingbackground2.png");
+}
+
 function setup() {
-  database=firebase.database();
-  createCanvas(500,500);
+  createCanvas(3000, 700);
+  engine = Engine.create();
+  world = engine.world;
 
-  dog=createSprite(250,300,150,150);
-  dog.addImage(dogImg);
-  dog.scale=0.15;
+  ground = new Ground(600, 600, 1200, 20);
 
-  foodStock=database.ref('Food');
-  foodStock.on("value",readStock);
-  textSize(20); 
+  hero = new Hero(400,800,250);
+  rope = new Rope(hero.body, { x: 500, y: 50 });
+  monster = new Monster(1100,550,300);
+
+  box1 = new Box(700, 100, 70, 70);
+  box2 = new Box(900, 100, 70, 70);
+  box3 = new Box(900, 100, 70, 70);
+  box4 = new Box(900, 100, 70, 70);
+  box5 = new Box(900, 100, 70, 70);
+  box6 = new Box(900, 100, 70, 70);
+  box7 = new Box(900, 100, 70, 70);
+  box8 = new Box(900, 100, 70, 70);
+  box9 = new Box(900, 100, 70, 70);
+  box10 = new Box(900, 100, 70, 70);
+  box11 = new Box(800, 100, 70, 70);
+  box12 = new Box(800, 100, 70, 70);
+  box13 = new Box(800, 100, 70, 70);
+  box14 = new Box(800, 100, 70, 70);
+  box15 = new Box(800, 100, 70, 70);
+  box16 = new Box(700, 100, 70, 70);
+  box17 = new Box(700, 100, 70, 70);
+  box18 = new Box(700, 100, 70, 70);
+  box19 = new Box(700, 100, 70, 70);
+  box20 = new Box(700, 100, 70, 70);
+  box21 = new Box(700, 100, 70, 70);
+  box22 = new Box(700, 100, 70, 70);
+  box23 = new Box(700, 100, 70, 70);
+
 }
 
-// function to display UI
 function draw() {
-  background(46,139,87);
- 
-  if(keyWentDown(UP_ARROW)){
-    writeStock(foodS);
-    dog.addImage(dogImg1);
-  }
-
-  drawSprites();
-  fill(255,255,254);
-  stroke("black");
-  text("Food remaining : "+foodS,170,200);
-  textSize(13);
-  text("Note: Press UP_ARROW Key To Feed Drago Milk!",130,10,300,20);
+  background(bg);
+  Engine.update(engine);
+  ground.display();
+  box1.display();
+  box2.display();
+  box3.display();
+  box4.display();
+  box5.display();
+  box6.display();
+  box7.display();
+  box8.display();
+  box9.display();
+  box10.display();
+  box11.display();
+  box12.display();
+  box13.display();
+  box14.display();
+  box15.display();
+  box16.display();
+  box17.display();
+  box18.display();
+  box19.display();
+  box20.display();
+  box21.display();
+  box22.display();
+  box23.display();
+  
+  hero.display();
+  rope.display();
+  monster.display();
 }
 
-//Function to read values from DB
-function readStock(data){
-  foodS=data.val();
-}
-
-//Function to write values in DB
-function writeStock(x){
-  if(x<=0){
-    x=0;
-  }else{
-    x=x-1;
-  } 
-  database.ref('/').update({
-    Food:x
-  })
+function mouseDragged(){
+  Matter.Body.setPosition(hero.body,{x:mouseX,y:mouseY})
 }
